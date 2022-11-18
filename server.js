@@ -11,8 +11,7 @@ app.use(express.static("pub"));
 //	npm install express
 //	npm install socket.io
 
-//TODO: Call a REST API from the server side to get the random name.
-//TODO: Make it so they can acutally supply their own username.
+
 
 let adjectives = ["Super", "Crazy", "Strong", "Wild", "Master"];
 let noun = ["Willy", "Programmer", "Bicyclist", "Clown", "Tortoise"];
