@@ -326,8 +326,6 @@ iPad
 well
 warm
 booger
-WhatsApp
-Skype
 landscape
 pine cone
 Mexico
@@ -364,7 +362,6 @@ invisible
 blindfold
 tuna
 controller
-Paypal
 King Kong
 neck
 lung
@@ -725,7 +722,6 @@ New Zealand
 apple pie
 warehouse
 cookie
-USB
 jellyfish
 bubble
 battery
@@ -881,7 +877,6 @@ burglar
 butler
 seafood
 Sydney Opera House
-Susan Wojcicki
 parents
 bed sheet
 Leonardo da Vinci
@@ -960,8 +955,7 @@ vacuum
 swimsuit
 divorce
 advertisement
-vuvuzela
-Mr Bean
+venezuela
 Fred Flintstone
 pet food
 upgrade
@@ -1066,7 +1060,6 @@ werewolf
 Black Friday
 cathedral
 Sherlock Holmes
-ABBA
 hard hat
 sword
 mirror
@@ -1145,7 +1138,6 @@ jackhammer
 allergy
 honeycomb
 headache
-Miniclip
 Mona Lisa
 cheetah
 virtual reality
@@ -1209,7 +1201,6 @@ basket
 step
 stapler
 pigeon
-zoom
 teacher
 holiday
 score
@@ -1251,14 +1242,12 @@ wart
 ribbon
 otter
 magazine
-Bomberman
 vaccine
 elder
 Romania
 champagne
 semicircle
 Suez Canal
-Mr Meeseeks
 villain
 inside
 spade
@@ -1384,7 +1373,6 @@ pigsty
 brand
 crowbar
 chimpanzee
-Chuck Norris
 raft
 carnival
 treadmill
@@ -1394,7 +1382,6 @@ apocalypse
 vitamin
 orchestra
 groom
-cringe
 knight
 litter box
 macho
@@ -1408,7 +1395,6 @@ take off
 wake up
 concert
 floppy disk
-BMX
 bulldozer
 manicure
 brainwash
@@ -1486,7 +1472,6 @@ napkin
 steam
 coach
 slope
-marigold
 Mozart
 bumper
 Asterix
@@ -1501,7 +1486,6 @@ centaur
 harbor
 uniform
 Beethoven
-Intel
 moth
 Spartacus
 fluid
@@ -1560,7 +1544,6 @@ goal
 bottle
 dress
 walk
-AC/DC
 tampon
 goatee
 prince
@@ -1574,6 +1557,7 @@ tiger
 player
 magician
 wool
+Taylor Swift
 saddle
 cowboy
 derp
@@ -1655,7 +1639,6 @@ guillotine
 timpani
 frostbite
 leave
-Mont Blanc
 palette
 electrician
 fitness trainer
@@ -1814,6 +1797,7 @@ boots
 target
 wine
 die
+dye
 moon
 airplane
 think
@@ -1866,7 +1850,7 @@ antenna
 classroom
 bronze
 writer
-Obelix
+obelisk
 touch
 sensei
 rest
@@ -1909,7 +1893,6 @@ wonderland
 wrestling
 hazelnut
 cushion
-W-LAN
 mayor
 community
 raisin
@@ -1931,7 +1914,6 @@ sad
 paw
 space
 bullet
-skribbl.io
 shirt
 cow
 worm
@@ -1966,7 +1948,6 @@ nickel
 party
 hurt
 Segway
-Mr. Bean
 banker
 cartoon
 double
@@ -2126,7 +2107,6 @@ employer
 stylus
 spoiler
 repeat
-tiramisu
 cuckoo
 collapse
 eskimo
@@ -2193,7 +2173,6 @@ patriot
 badger
 studio
 athlete
-quokka
 trend
 pinwheel
 gravel
@@ -2208,7 +2187,6 @@ asymmetry
 actor
 carpenter
 aristocrat
-Zuma
 chinchilla
 archaeologist
 apple
@@ -2243,7 +2221,6 @@ scuba
 anteater
 pensioner
 coyote
-vise
 bobsled
 purity
 tailor
@@ -2251,20 +2228,17 @@ meerkat
 weasel
 invention
 lynx
-kendama
 zeppelin
 patient
 gladiator
 slump
 Capricorn
-baklava
 prune
 stress
 crucible
 hitchhiker
 election
 caviar
-marmot
 hair roller
 pistol
 cone
@@ -2272,7 +2246,6 @@ ant
 lock
 hanger
 cap
-Mr. Meeseeks
 comedy
 coat
 tourist
@@ -2296,3 +2269,8 @@ shark
 abyss
 betray
 cicada
+Michael Kowalczyk
+Randy Appleton
+Andy Poe
+Jeffrey Horn
+John Sarkela
