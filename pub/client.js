@@ -3,6 +3,10 @@
         In HTML: 		<script src="/socket.io/socket.io.js" type="text/javascript"></script>
         In client.js	var socket = io();
 */
+/*
+link to drawing stuff
+https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
+*/
 
 var socket = io();
 
