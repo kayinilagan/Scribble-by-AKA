@@ -7,10 +7,8 @@ var socketio = require("socket.io");
 var io = socketio(server);
 app.use(express.static("pub"));
 
-//On the server side, you also need to do:
-//	npm install express
-//	npm install socket.io
-
+//TODO: Call some REST API from the server side to get the random quote.
+//TODO: Make it so they can acutally supply their own username.
 
 
 let adjectives = ["Super", "Crazy", "Strong", "Wild", "Master"];
@@ -24,15 +22,23 @@ function randomUser() {
     return randomFromArray(adjectives) + randomFromArray(noun) + randomFromArray(emoji);
 }
 
+//Returns an array of objects describing the users
 function cleanUserList() {
     let ret = [];
     for (i in userList) ret.push(userList[i]);
     return ret;
 }
 
-//List of all users connected:
+//List of all users connected - each is associated with an object with these properties:
+//username
+//roundsPlayed
+//roundsCorrect (where they typed in the phrase correctly before time ran out)
+//roundsWon (where they were the first one to type it in correctly)
+//correctThisRound (true or false)
+//wonThisRound (true or false)
 let userList = {};
-
+let currentQuote = null;
+let someoneOne = false;
 
 //Every time a client connects (visits the page) this function(socket) {...} gets executed.
 //The socket is a different object each time a new client connects.
@@ -40,35 +46,80 @@ io.on("connection", function (socket) {
     socket.on("disconnect", function () {
         //This particular socket connection was terminated (probably the client went to a different page
         //or closed their browser).
-        console.log("Somebody disconnected.");
+        console.log(userList[socket.id].username + " disconnected.");
         delete userList[socket.id];
         io.emit("sendUsers", cleanUserList());
     });
 
-    console.log("Somebody connected " + socket.id);
+    socket.on("gotIt", function () {
+        if (currentQuote != null) { //only check it if we are in a round.
+            userList[socket.id].correctThisRound = true;
+            if (!someoneOne) { //if this is the first person to get it, give them credit.
+                userList[socket.id].wonThisRound = true;
+                someoneOne = true;
+            }
+            io.emit("sendUsers", cleanUserList());
+        }
+    });
+
     //Update internal bookeeping to have this client in our list
-    userList[socket.id] = randomUser();
-    console.log(userList);
-    //Send a random name and emoji to that particular client (socket)
-    socket.emit("sendName", userList[socket.id]);
-    //Tell this client the list of people connected to this particular server.
-    io.emit("sendUsers", cleanUserList()); //broadcasts to all sockets that are connected!
+    userList[socket.id] = {
+        username: randomUser(),
+        roundsPlayed: null,
+        roundsCorrect: null,
+        roundsWon: null,
+        correctThisRound: false,
+        wonThisRound: false
+    };
 
+    console.log(userList[socket.id].username + " connected with id " + socket.id);
 
+    socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
+    io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
 });
 
 function startGame() {
-    /* TODO: actually start the game */
-    setTimeout(gameOver, 10000);
+    someoneOne = false;
+    for (i in userList) {
+        //If this is their first round (they actually didn't play last round), start them out fresh
+        if (userList[i].roundsPlayed == null) {
+            userList[i].roundsPlayed = 0;
+            userList[i].roundsCorrect = 0;
+            userList[i].roundsWon = 0;
+        }
+
+        //Clear out their variables for this next round
+        userList[i].correctThisRound = false;
+        userList[i].wonThisRound = false;
+    }
+
+    //actually start the game
+    currentQuote = randomFromArray(quoteList);
+    let secondsToAnswer = currentQuote.length / 2; //Allow them 4 characters per second to get it.
+    io.emit("newQuote", currentQuote, secondsToAnswer);
+
+    setTimeout(gameOver, secondsToAnswer * 1000);
 }
 
 function gameOver() {
-    /* TODO: actually send the game-over stuff */
-    setTimeout(startGame, 2000);
+    //update scores
+    for (i in userList) {
+        if (userList[i].roundsPlayed != null) { //if they actually participated in this round that just finished...
+            userList[i].roundsPlayed++;
+            if (userList[i].correctThisRound) userList[i].roundsCorrect++;
+            if (userList[i].wonThisRound) userList[i].roundsWon++;
+        }
+    }
+    currentQuote = null; //indicates that we are between rounds.
+
+    //Send the game results
+    io.emit("sendUsers", cleanUserList());
+
+    //Start the next round in 5 seconds.
+    setTimeout(startGame, 5000);
 }
 
 server.listen(80, function () {
     console.log("Server with socket.io is ready.");
-
     startGame();
 });
