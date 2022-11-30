@@ -92,13 +92,14 @@ function startGame() {
         userList[i].correctThisRound = false;
         userList[i].wonThisRound = false;
     }
-
-    //actually start the game
-    currentQuote = randomFromArray(quoteList);
-    let secondsToAnswer = currentQuote.length / 2; //Allow them 4 characters per second to get it.
-    io.emit("newQuote", currentQuote, secondsToAnswer);
-
-    setTimeout(gameOver, secondsToAnswer * 1000);
+    /*
+        //actually start the game
+        currentQuote = randomFromArray(quoteList);
+        let secondsToAnswer = currentQuote.length / 2; //Allow them 4 characters per second to get it.
+        io.emit("newQuote", currentQuote, secondsToAnswer);
+    
+        setTimeout(gameOver, secondsToAnswer * 1000);
+        */
 }
 
 function gameOver() {
