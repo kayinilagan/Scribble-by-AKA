@@ -10,6 +10,7 @@ https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
 
 var socket = io();
 
+var canvas;
 var canvas, ctx, flag = false,
     prevX = 0,
     currX = 0,
@@ -66,27 +67,7 @@ function color(obj) {
     }
     if (x == "white") y = 14;
     else y = 2;
-
 }
-
-function draw() {
-    ctx.beginPath();
-    ctx.moveTo(prevX, prevY);
-    ctx.lineTo(currX, currY);
-    ctx.strokeStyle = x;
-    ctx.lineWidth = y;
-    ctx.stroke();
-    ctx.closePath();
-}
-
-function erase() {
-    var m = confirm("Want to clear");
-    if (m) {
-        ctx.clearRect(0, 0, w, h);
-        document.getElementById("canvasimg").style.display = "none";
-    }
-}
-
 function findxy(res, e) {
     if (res == 'down') {
         prevX = currX;
@@ -118,13 +99,40 @@ function findxy(res, e) {
     }
 }
 
-
 let myApp = Vue.createApp({
     data() {
         return {
             username: null,
-            userList: null
+            userList: null,
+            prevX: 0,
+            currX: 0,
+            prevY: 0,
+            currY: 0,
+            dot_flag: false,
+            ctx,
+            flag: false,
+            x: "black",
+            y: 2
         };
+    },
+    methods() {
+
+        function draw() {
+            ctx.beginPath();
+            ctx.moveTo(prevX, prevY);
+            ctx.lineTo(currX, currY);
+            ctx.strokeStyle = x;
+            ctx.lineWidth = y;
+            ctx.stroke();
+            ctx.closePath();
+        }
+        function erase() {
+            var m = confirm("Want to clear");
+            if (m) {
+                ctx.clearRect(0, 0, w, h);
+                document.getElementById("canvasimg").style.display = "none";
+            }
+        }
     },
     mounted() {
         socket.on("sendName", (dataFromServer) => {

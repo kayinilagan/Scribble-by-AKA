@@ -7,6 +7,9 @@ var socketio = require("socket.io");
 var io = socketio(server);
 app.use(express.static("pub"));
 
+var wordList = require("./wordList");
+var os = require('os');
+
 //TODO: Call some REST API from the server side to get the random quote.
 //TODO: Make it so they can acutally supply their own username.
 
@@ -20,6 +23,10 @@ function randomFromArray(arr) {
 
 function randomUser() {
     return randomFromArray(adjectives) + randomFromArray(noun) + randomFromArray(emoji);
+}
+
+function randomWord() {
+    return randomFromArray(wordList.getWordList());
 }
 
 //Returns an array of objects describing the users
@@ -37,7 +44,7 @@ function cleanUserList() {
 //correctThisRound (true or false)
 //wonThisRound (true or false)
 let userList = {};
-let currentQuote = null;
+let currentWord = null;
 let someoneOne = false;
 
 //Every time a client connects (visits the page) this function(socket) {...} gets executed.
@@ -99,7 +106,11 @@ function startGame() {
         io.emit("newQuote", currentQuote, secondsToAnswer);
     
         setTimeout(gameOver, secondsToAnswer * 1000);
-        */
+    */
+
+    currentWord = randomWord();
+    console.log(currentWord);
+
 }
 
 function gameOver() {
@@ -122,5 +133,6 @@ function gameOver() {
 
 server.listen(80, function () {
     console.log("Server with socket.io is ready.");
+    console.log("Connect to: " + os.networkInterfaces()['Wi-Fi'][1].cidr);
     startGame();
 });
