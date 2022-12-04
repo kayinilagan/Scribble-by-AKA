@@ -8,35 +8,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>test</title>
+    <link rel="stylesheet" href="style.css">
     <script defer src="/socket.io/socket.io.js" type="text/javascript"></script>
     <script src="wordlist.js" type="module"></script>
     <script defer src="vue.global.js" type="text/javascript"></script>
     <script defer src="client.js" type="text/javascript"></script>
 </head>
-<div id="app">
 
-    <body onload="init()">
-        <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:40%;border:2px solid;"></canvas>
-        <div style="position:absolute;top:77%;left:43%;">Choose Color</div>
-        <div style="position:absolute;top:80%;left:45%;width:10px;height:10px;background:green;" id="green"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:80%;left:46%;width:10px;height:10px;background:blue;" id="blue"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:80%;left:47%;width:10px;height:10px;background:red;" id="red"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:82%;left:45%;width:10px;height:10px;background:yellow;" id="yellow"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:82%;left:46%;width:10px;height:10px;background:orange;" id="orange"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:82%;left:47%;width:10px;height:10px;background:black;" id="black"
-            onclick="color(this)"></div>
-        <div style="position:absolute;top:77%;left:55%;">Eraser</div>
-        <div style="position:absolute;top:80%;left:55%;width:15px;height:15px;background:white;border:2px solid;"
-            id="white" onclick="color(this)"></div>
-        <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-        <input type="button" value="clear" id="clr" size="23" onclick="erase()"
-            style="position:absolute;top:77%;left:36%;">
-    </body>
+
+<body>
+    <div id="app">
+        <div>
+            <canvas id="canvas" width="400" height="400" @mousedown="startDrag" @click="mouseClick"></canvas>
+        </div>
+    </div>
+</body>
 </div>
 
 </html>

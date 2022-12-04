@@ -5,6 +5,7 @@ const { start } = require("repl");
 var server = http.Server(app);
 var socketio = require("socket.io");
 var io = socketio(server);
+var sctx;
 app.use(express.static("pub"));
 
 var wordList = require("./wordList");
@@ -68,6 +69,7 @@ io.on("connection", function (socket) {
             io.emit("sendUsers", cleanUserList());
         }
     });
+
 
     //Update internal bookeeping to have this client in our list
     userList[socket.id] = {
@@ -133,6 +135,6 @@ function gameOver() {
 
 server.listen(80, function () {
     console.log("Server with socket.io is ready.");
-    console.log("Connect to: " + os.networkInterfaces()['Wi-Fi'][1].cidr);
+    console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
     startGame();
 });
