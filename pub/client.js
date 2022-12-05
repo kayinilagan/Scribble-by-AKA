@@ -52,9 +52,6 @@ let myApp = Vue.createApp({
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
         },
-        mouseUp(event) {
-
-        }
     },
     computed: {
 
