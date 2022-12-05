@@ -25,15 +25,17 @@ let myApp = Vue.createApp({
             username: null,
             userList: null,
             canvas: null,
-            ctx: null
+            ctx: null,
+            lineColor: "#000000"
         };
     },
     methods: {
         mouseDown(event) {
             let mouseCoords = getCursorPosition(canvas, event);
+            ctx.strokeStyle = this.lineColor;
             ctx.moveTo(mouseCoords.x, mouseCoords.y);
             ctx.beginPath();
-            socket.emit("startDrawing", mouseCoords);
+            socket.emit("startDrawing", mouseCoords, this.lineColor);
             if (debug) {
                 console.log(event.type);
                 console.log(mouseCoords);
@@ -43,9 +45,10 @@ let myApp = Vue.createApp({
         mouseMove(event) {
             if (event.buttons !== 1) return;
             let mouseCoords = getCursorPosition(canvas, event);
+            ctx.strokeStyle = this.lineColor;
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
-            socket.emit("drawTo", mouseCoords);
+            socket.emit("drawTo", mouseCoords, this.lineColor);
             if (debug) console.log("Emit drawTo");
         },
     },
@@ -61,15 +64,17 @@ let myApp = Vue.createApp({
         socket.on("sendUsers", (dataFromServer) => {
             this.userList = dataFromServer;
         });
-        socket.on("artistStartsDrawing", (coords) => {
+        socket.on("artistStartsDrawing", (coords, color) => {
             if (debug)
                 console.log("recieved artistStart");
+            ctx.strokeStyle = color;
             ctx.moveTo(coords.x, coords.y);
             ctx.beginPath();
         });
-        socket.on("artistDrawsTo", (coords) => {
+        socket.on("artistDrawsTo", (coords, color) => {
             if (debug)
                 console.log("recieved artistDrawTo");
+            ctx.strokeStyle = color;
             ctx.lineTo(coords.x, coords.y);
             ctx.stroke();
         });
