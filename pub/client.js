@@ -30,11 +30,6 @@ let myApp = Vue.createApp({
         };
     },
     methods: {
-        mouseClick(event) {
-            let mouseCoords = getCursorPosition(canvas, event);
-            console.log(event.type);
-            console.log(mouseCoords);
-        },
         mouseDown(event) {
             let mouseCoords = getCursorPosition(canvas, event);
             console.log(event.type);
