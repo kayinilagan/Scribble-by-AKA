@@ -10,6 +10,8 @@ https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
 
 var socket = io();
 
+let debug = false;
+
 function getCursorPosition(canvas, event) {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -32,12 +34,14 @@ let myApp = Vue.createApp({
     methods: {
         mouseDown(event) {
             let mouseCoords = getCursorPosition(canvas, event);
-            console.log(event.type);
-            console.log(mouseCoords);
             ctx.moveTo(mouseCoords.x, mouseCoords.y);
             ctx.beginPath();
             socket.emit("startDrawing", mouseCoords);
-            console.log("Emit startDrawing");
+            if (debug) {
+                console.log(event.type);
+                console.log(mouseCoords);
+                console.log("Emit startDrawing");
+            }
         },
         mouseMove(event) {
             if (event.buttons !== 1) return;
@@ -45,7 +49,7 @@ let myApp = Vue.createApp({
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
             socket.emit("drawTo", mouseCoords);
-            console.log("Emit drawTo");
+            if (debug) console.log("Emit drawTo");
         },
     },
     computed: {
@@ -61,12 +65,14 @@ let myApp = Vue.createApp({
             this.userList = dataFromServer;
         });
         socket.on("artistStartsDrawing", (coords) => {
-            console.log("recieved artistStart");
+            if (debug)
+                console.log("recieved artistStart");
             ctx.moveTo(coords.x, coords.y);
             ctx.beginPath();
         });
         socket.on("artistDrawsTo", (coords) => {
-            console.log("recieved artistDrawTo");
+            if (debug)
+                console.log("recieved artistDrawTo");
             ctx.lineTo(coords.x, coords.y);
             ctx.stroke();
         });

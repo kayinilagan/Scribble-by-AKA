@@ -14,6 +14,7 @@ var os = require('os');
 //TODO: Call some REST API from the server side to get the random quote.
 //TODO: Make it so they can acutally supply their own username.
 
+let debug = false;
 
 let adjectives = ["Super", "Crazy", "Strong", "Wild", "Master"];
 let noun = ["Willy", "Programmer", "Bicyclist", "Clown", "Tortoise"];
@@ -129,12 +130,14 @@ server.listen(80, function () {
 
         socket.on("startDrawing", (coords) => {
             //tell all clients to start drawing
-            console.log("recieved startDrawing");
+            if (debug)
+                console.log("recieved startDrawing");
             io.emit("artistStartsDrawing", coords);
         });
 
         socket.on("drawTo", (coords) => {
-            console.log("recieved DrawTo");
+            if (debug)
+                console.log("recieved DrawTo");
             io.emit("artistDrawsTo", coords);
         });
 
