@@ -24,9 +24,6 @@ let myApp = Vue.createApp({
         return {
             username: null,
             userList: null,
-            x: null,
-            y: null,
-            type: null,
             canvas: null,
             ctx: null
         };
