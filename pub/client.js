@@ -28,6 +28,7 @@ let myApp = Vue.createApp({
             ctx: null,
             lineColor: "#000000",
             word: "Loading...",
+            wordLength: 0,
             guess: "",
             correct: false
         };
@@ -90,6 +91,7 @@ let myApp = Vue.createApp({
         socket.on("newWord", (recievedWord, timer) => {
             console.log("recieved newWord: " + recievedWord);
             this.word = recievedWord;
+            this.wordLength = recievedWord.length;
         })
     }
 }).mount("#app");
