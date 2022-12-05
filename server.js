@@ -127,8 +127,15 @@ server.listen(80, function () {
             }
         });
 
-        socket.on("startDrawing", (x, y) => {
+        socket.on("startDrawing", (coords) => {
+            //tell all clients to start drawing
+            console.log("recieved startDrawing");
+            io.emit("artistStartsDrawing", coords);
+        });
 
+        socket.on("drawTo", (coords) => {
+            console.log("recieved DrawTo");
+            io.emit("artistDrawsTo", coords);
         });
 
 

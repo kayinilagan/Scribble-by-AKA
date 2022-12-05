@@ -36,12 +36,16 @@ let myApp = Vue.createApp({
             console.log(mouseCoords);
             ctx.moveTo(mouseCoords.x, mouseCoords.y);
             ctx.beginPath();
+            socket.emit("startDrawing", mouseCoords);
+            console.log("Emit startDrawing");
         },
         mouseMove(event) {
             if (event.buttons !== 1) return;
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
+            socket.emit("drawTo", mouseCoords);
+            console.log("Emit drawTo");
         },
     },
     computed: {
@@ -55,6 +59,16 @@ let myApp = Vue.createApp({
         });
         socket.on("sendUsers", (dataFromServer) => {
             this.userList = dataFromServer;
+        });
+        socket.on("artistStartsDrawing", (coords) => {
+            console.log("recieved artistStart");
+            ctx.moveTo(coords.x, coords.y);
+            ctx.beginPath();
+        });
+        socket.on("artistDrawsTo", (coords) => {
+            console.log("recieved artistDrawTo");
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
         });
     }
 }).mount("#app");
