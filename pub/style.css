@@ -6,3 +6,15 @@ canvas {
 body {
     background-color: bisque;
 }
+
+div {
+    text-align: center;
+}
+
+span {
+    font-size: xx-large;
+}
+
+input {
+    font-size: x-large;
+}

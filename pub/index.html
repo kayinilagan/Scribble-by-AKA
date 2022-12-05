@@ -17,11 +17,11 @@
 
 <body>
     <div id="app">
-
         <span v-if="word != 'Loading...'"> {{ word }} </span>
         <span> <sup> {{ wordLength }} </sup></span>
         <div>
-            <canvas id="canvas" width="800" height="600" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
+            <canvas id="canvas" width="800" height="800" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
+            <br>
             <input v-model="lineColor" type="color">
             <div>
                 <input v-on:keydown.enter="checkGuess" v-model="guess" type="text">
