@@ -10,7 +10,7 @@
     <title>test</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="/socket.io/socket.io.js" type="text/javascript"></script>
-    <script src="wordlist.js" type="module"></script>
+    <script defer src="wordlist.js" type="module"></script>
     <script defer src="vue.global.js" type="text/javascript"></script>
     <script defer src="client.js" type="text/javascript"></script>
 </head>
@@ -19,7 +19,8 @@
 <body>
     <div id="app">
         <div>
-            <canvas id="canvas" width="400" height="400" @mousedown="startDrag" @click="mouseClick"></canvas>
+            <canvas id="canvas" width="400" height="400" @mousedown="mouseDown" @mousemove="mouseMove"
+                @mouseup="mouseUp"></canvas>
         </div>
     </div>
 </body>

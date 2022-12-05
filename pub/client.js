@@ -30,21 +30,29 @@ let myApp = Vue.createApp({
         };
     },
     methods: {
-        startDrag(event) {
-            console.log(event.type);
-        },
         draw() {
             ctx.fillStyle = "green";
             ctx.fillRect(10, 10, 150, 100);
         },
         mouseClick(event) {
             let mouseCoords = getCursorPosition(canvas, event);
-            ctx.fillStyle = "black";
-            ctx.fillRect(mouseCoords.x, mouseCoords.y, 10, 10);
             console.log(event.type);
             console.log(mouseCoords);
         },
         mouseDown(event) {
+            let mouseCoords = getCursorPosition(canvas, event);
+            console.log(event.type);
+            console.log(mouseCoords);
+            ctx.moveTo(mouseCoords.x, mouseCoords.y);
+            ctx.beginPath();
+        },
+        mouseMove(event) {
+            let mouseCoords = getCursorPosition(canvas, event);
+            ctx.lineTo(mouseCoords.x, mouseCoords.y);
+            ctx.stroke();
+        },
+        mouseUp(event) {
+
         }
     },
     computed: {
