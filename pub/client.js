@@ -30,10 +30,6 @@ let myApp = Vue.createApp({
         };
     },
     methods: {
-        draw() {
-            ctx.fillStyle = "green";
-            ctx.fillRect(10, 10, 150, 100);
-        },
         mouseClick(event) {
             let mouseCoords = getCursorPosition(canvas, event);
             console.log(event.type);

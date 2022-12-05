@@ -48,44 +48,6 @@ let userList = {};
 let currentWord = null;
 let someoneOne = false;
 
-//Every time a client connects (visits the page) this function(socket) {...} gets executed.
-//The socket is a different object each time a new client connects.
-io.on("connection", function (socket) {
-    socket.on("disconnect", function () {
-        //This particular socket connection was terminated (probably the client went to a different page
-        //or closed their browser).
-        console.log(userList[socket.id].username + " disconnected.");
-        delete userList[socket.id];
-        io.emit("sendUsers", cleanUserList());
-    });
-
-    socket.on("gotIt", function () {
-        if (currentQuote != null) { //only check it if we are in a round.
-            userList[socket.id].correctThisRound = true;
-            if (!someoneOne) { //if this is the first person to get it, give them credit.
-                userList[socket.id].wonThisRound = true;
-                someoneOne = true;
-            }
-            io.emit("sendUsers", cleanUserList());
-        }
-    });
-
-
-    //Update internal bookeeping to have this client in our list
-    userList[socket.id] = {
-        username: randomUser(),
-        roundsPlayed: null,
-        roundsCorrect: null,
-        roundsWon: null,
-        correctThisRound: false,
-        wonThisRound: false
-    };
-
-    console.log(userList[socket.id].username + " connected with id " + socket.id);
-
-    socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
-    io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
-});
 
 function startGame() {
     someoneOne = false;
@@ -135,6 +97,56 @@ function gameOver() {
 
 server.listen(80, function () {
     console.log("Server with socket.io is ready.");
+    if (os.networkInterfaces()['Wi-Fi'] != null) {
+        console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
+    } else if (os.networkInterfaces()['Ethernet'] != null) {
+        console.log("Connect to: http://" + os.networkInterfaces()['Ethernet'][1].cidr.slice(0, -3) + ":80");
+    } else {
+        console.log("Connect to 127.0.0.1 or find Public IP");
+    }
     //console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
+    //Every time a client connects (visits the page) this function(socket) {...} gets executed.
+    //The socket is a different object each time a new client connects.
+    io.on("connection", function (socket) {
+        socket.on("disconnect", function () {
+            //This particular socket connection was terminated (probably the client went to a different page
+            //or closed their browser).
+            console.log(userList[socket.id].username + " disconnected.");
+            delete userList[socket.id];
+            io.emit("sendUsers", cleanUserList());
+        });
+
+        socket.on("gotIt", function () {
+            if (currentQuote != null) { //only check it if we are in a round.
+                userList[socket.id].correctThisRound = true;
+                if (!someoneOne) { //if this is the first person to get it, give them credit.
+                    userList[socket.id].wonThisRound = true;
+                    someoneOne = true;
+                }
+                io.emit("sendUsers", cleanUserList());
+            }
+        });
+
+        socket.on("startDrawing", (x, y) => {
+
+        });
+
+
+        //Update internal bookeeping to have this client in our list
+        userList[socket.id] = {
+            username: randomUser(),
+            roundsPlayed: null,
+            roundsCorrect: null,
+            roundsWon: null,
+            correctThisRound: false,
+            wonThisRound: false
+        };
+
+        console.log(userList[socket.id].username + " connected with id " + socket.id);
+
+        socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
+        io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
+    });
+
     startGame();
 });
