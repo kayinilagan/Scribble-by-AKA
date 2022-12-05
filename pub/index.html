@@ -22,7 +22,11 @@
         <div>
             <canvas id="canvas" width="800" height="800" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
             <br>
+            <label> Color: </label>
             <input v-model="lineColor" type="color">
+            <label> Size: </label>
+            <input type="range" name="size" id="size" v-model="lineSize" min="0" max="100">
+            <label> {{ lineSize + " px"}}</label>
             <div>
                 <input v-on:keydown.enter="checkGuess" v-model="guess" type="text">
                 <span> <sup> {{ " " + guess.length }} </sup> </span>

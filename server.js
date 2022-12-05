@@ -19,6 +19,7 @@ let debug = false;
 let adjectives = ["Super", "Crazy", "Strong", "Wild", "Master"];
 let noun = ["Willy", "Programmer", "Bicyclist", "Clown", "Tortoise"];
 let emoji = ["😂", "❤", "😍", "🤣", "😊", "🙏", "💕", "😭"];
+
 function randomFromArray(arr) {
     return arr[Math.floor(arr.length * Math.random())];
 }
@@ -152,7 +153,8 @@ server.listen(80, function () {
         };
 
         console.log(userList[socket.id].username + " connected with id " + socket.id);
-
+        if (debug)
+            console.log(userList);
         socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
         io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
         let secondsToAnswer = 30;

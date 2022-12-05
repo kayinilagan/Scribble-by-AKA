@@ -27,6 +27,7 @@ let myApp = Vue.createApp({
             canvas: null,
             ctx: null,
             lineColor: "#000000",
+            lineSize: 3,
             word: "Loading...",
             wordLength: 0,
             guess: "",
@@ -37,6 +38,7 @@ let myApp = Vue.createApp({
         mouseDown(event) {
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.strokeStyle = this.lineColor;
+            ctx.lineWidth = this.lineSize;
             ctx.moveTo(mouseCoords.x, mouseCoords.y);
             ctx.beginPath();
             socket.emit("startDrawing", mouseCoords, this.lineColor);
@@ -50,6 +52,7 @@ let myApp = Vue.createApp({
             if (event.buttons !== 1) return;
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.strokeStyle = this.lineColor;
+            ctx.lineWidth = this.lineSize;
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
             socket.emit("drawTo", mouseCoords, this.lineColor);
@@ -68,6 +71,7 @@ let myApp = Vue.createApp({
     mounted() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
+        ctx.lineCap = 'round';
         socket.on("sendName", (dataFromServer) => {
             this.username = dataFromServer;
         });
