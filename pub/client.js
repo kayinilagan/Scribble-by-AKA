@@ -41,7 +41,7 @@ let myApp = Vue.createApp({
             ctx.lineWidth = this.lineSize;
             ctx.moveTo(mouseCoords.x, mouseCoords.y);
             ctx.beginPath();
-            socket.emit("startDrawing", mouseCoords, this.lineColor);
+            socket.emit("startDrawing", mouseCoords, this.lineColor, this.lineSize);
             if (debug) {
                 console.log(event.type);
                 console.log(mouseCoords);
@@ -55,7 +55,7 @@ let myApp = Vue.createApp({
             ctx.lineWidth = this.lineSize;
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
-            socket.emit("drawTo", mouseCoords, this.lineColor);
+            socket.emit("drawTo", mouseCoords, this.lineColor, this.lineSize);
             if (debug) console.log("Emit drawTo");
         },
         checkGuess() {
@@ -78,17 +78,19 @@ let myApp = Vue.createApp({
         socket.on("sendUsers", (dataFromServer) => {
             this.userList = dataFromServer;
         });
-        socket.on("artistStartsDrawing", (coords, color) => {
+        socket.on("artistStartsDrawing", (coords, color, size) => {
             if (debug)
                 console.log("recieved artistStart");
             ctx.strokeStyle = color;
+            ctx.lineWidth = size;
             ctx.moveTo(coords.x, coords.y);
             ctx.beginPath();
         });
-        socket.on("artistDrawsTo", (coords, color) => {
+        socket.on("artistDrawsTo", (coords, color, size) => {
             if (debug)
                 console.log("recieved artistDrawTo");
             ctx.strokeStyle = color;
+            ctx.lineWidth = size;
             ctx.lineTo(coords.x, coords.y);
             ctx.stroke();
         });
