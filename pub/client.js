@@ -26,7 +26,10 @@ let myApp = Vue.createApp({
             userList: null,
             canvas: null,
             ctx: null,
-            lineColor: "#000000"
+            lineColor: "#000000",
+            word: "Loading...",
+            guess: "",
+            correct: false
         };
     },
     methods: {
@@ -51,9 +54,15 @@ let myApp = Vue.createApp({
             socket.emit("drawTo", mouseCoords, this.lineColor);
             if (debug) console.log("Emit drawTo");
         },
+        checkGuess() {
+            if (this.guess == this.word) {
+                this.correct = true;
+            } else {
+                this.correct = false;
+            }
+        }
     },
     computed: {
-
     },
     mounted() {
         canvas = document.getElementById("canvas");
@@ -78,5 +87,9 @@ let myApp = Vue.createApp({
             ctx.lineTo(coords.x, coords.y);
             ctx.stroke();
         });
+        socket.on("newWord", (recievedWord, timer) => {
+            console.log("recieved newWord: " + recievedWord);
+            this.word = recievedWord;
+        })
     }
 }).mount("#app");

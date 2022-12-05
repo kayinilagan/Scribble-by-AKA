@@ -75,7 +75,6 @@ function startGame() {
 
     currentWord = randomWord();
     console.log(currentWord);
-
 }
 
 function gameOver() {
@@ -156,6 +155,8 @@ server.listen(80, function () {
 
         socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
         io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
+        let secondsToAnswer = 30;
+        io.emit("newWord", currentWord, secondsToAnswer);
     });
 
     startGame();
