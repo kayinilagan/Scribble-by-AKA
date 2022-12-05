@@ -135,6 +135,6 @@ function gameOver() {
 
 server.listen(80, function () {
     console.log("Server with socket.io is ready.");
-    console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
+    //console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
     startGame();
 });

@@ -47,6 +47,7 @@ let myApp = Vue.createApp({
             ctx.beginPath();
         },
         mouseMove(event) {
+            if (event.buttons !== 1) return;
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.lineTo(mouseCoords.x, mouseCoords.y);
             ctx.stroke();
