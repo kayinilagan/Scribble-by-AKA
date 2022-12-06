@@ -73,6 +73,7 @@ let myApp = Vue.createApp({
                 return;
             } else if (this.guess == this.word) {
                 this.correct = true;
+                socket.emit("gotIt");
             } else {
                 this.correct = false;
             }
@@ -85,6 +86,10 @@ let myApp = Vue.createApp({
                 this.artist = false;
             }
             else this.timeLeft = this.timeLeft.toFixed(1) + " seconds left...";
+        },
+        nicePercent(a) { //changes a fraction to a nicely formatted percentage as a string | From Word Race from Dr. Kow
+            if (!Number.isFinite(a)) return "N/A";
+            return (100 * a).toFixed(2) + "%"; //2 decimal places and percent symbol.
         }
     },
     computed: {

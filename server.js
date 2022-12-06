@@ -50,7 +50,7 @@ let userList = {};
 let numOfUsers = 0;
 let keyList = [];
 let currentWord = null;
-let someoneOne = false;
+let someoneWon = false;
 let iterable = 0;
 
 
@@ -65,12 +65,12 @@ io.on("connection", function (socket) {
         io.emit("sendUsers", cleanUserList());
     });
 
-    socket.on("gotIt", function () {
-        if (currentQuote != null) { //only check it if we are in a round.
+    socket.on("gotIt", function () { // From Dr. Kow Word Race
+        if (currentWord != null) { //only check it if we are in a round.
             userList[socket.id].correctThisRound = true;
-            if (!someoneOne) { //if this is the first person to get it, give them credit.
+            if (!someoneWon) { //if this is the first person to get it, give them credit.
                 userList[socket.id].wonThisRound = true;
-                someoneOne = true;
+                someoneWon = true;
             }
             io.emit("sendUsers", cleanUserList());
         }

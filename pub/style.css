@@ -10,11 +10,25 @@ body {
 #game,
 #art {
     text-align: center;
-}
-
-span {
     font-size: xx-large;
 }
+
+#parent {
+    display: flex;
+}
+
+#leaderboard {
+    width: 200px;
+}
+
+#art {
+    flex: 1;
+}
+
+#answer {
+    color: aquamarine;
+}
+
 
 input {
     font-size: x-large;
