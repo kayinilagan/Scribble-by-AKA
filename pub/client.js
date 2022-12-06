@@ -27,17 +27,22 @@ let myApp = Vue.createApp({
             canvas: null,
             ctx: null,
             lineColor: "#000000",
-            lineSize: 3,
+            lineSize: 10,
             word: null,
             wordLength: 0,
+            displayWord: null,
             guess: "",
             correct: false,
             timeLeft: "",
-            timeLimit: 0
+            timeLimit: 0,
+            artist: false
         };
     },
     methods: {
         mouseDown(event) {
+            if (this.artist != true) {
+                return;
+            }
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.strokeStyle = this.lineColor;
             ctx.lineWidth = this.lineSize;
@@ -51,6 +56,9 @@ let myApp = Vue.createApp({
             }
         },
         mouseMove(event) {
+            if (this.artist != true) {
+                return;
+            }
             if (event.buttons !== 1) return;
             let mouseCoords = getCursorPosition(canvas, event);
             ctx.strokeStyle = this.lineColor;
@@ -61,7 +69,9 @@ let myApp = Vue.createApp({
             if (debug) console.log("Emit drawTo");
         },
         checkGuess() {
-            if (this.guess == this.word) {
+            if (this.artist == true) {
+                return;
+            } else if (this.guess == this.word) {
                 this.correct = true;
             } else {
                 this.correct = false;
@@ -69,8 +79,11 @@ let myApp = Vue.createApp({
         },
         setTimeLeft() {
             this.timeLeft = (this.timeLimit - new Date().getTime()) / 1000.0;
-            if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait games are 40 seconds long";
-            else if (this.timeLeft <= 0) this.timeLeft = "Times Up!";
+            if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait rounds are 40 seconds long";
+            else if (this.timeLeft <= 0) {
+                this.timeLeft = "Times Up!";
+                this.artist = false;
+            }
             else this.timeLeft = this.timeLeft.toFixed(1) + " seconds left...";
         }
     },
@@ -102,12 +115,32 @@ let myApp = Vue.createApp({
             ctx.lineTo(coords.x, coords.y);
             ctx.stroke();
         });
-        socket.on("newWord", (recievedWord, timer) => {
+        socket.on("newWord", (recievedWord, timer, artist) => {
+            const blank = "_" + String.fromCharCode(160);
+            const doubleSpace = "" + String.fromCharCode(160) + String.fromCharCode(160);
+            const regex = /[a-zA-z]/g;
+            const spaceRegex = / /g;
             console.log("recieved newWord: " + recievedWord);
+            if (artist == this.username) {
+                console.log("You are the artist!");
+                this.artist = true;
+                this.displayWord = recievedWord;
+            } else {
+                console.log("You are a guesser!");
+                this.artist = false;
+                this.displayWord = recievedWord.replace(regex, blank).replace(spaceRegex, doubleSpace);
+                console.log(this.displayWord);
+            }
+
             this.word = recievedWord;
+            this.wordLength = recievedWord.match(regex).length;
             this.guess = "";
-            this.wordLength = recievedWord.length;
+
             this.timeLimit = (new Date()).getTime() + 1000 * timer; // finds ending time in milliseconds
+        });
+        socket.on("clearCanvas", () => {
+            console.log("recieved ClearCommand!");
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         });
         setInterval(this.setTimeLeft, 100);
     }

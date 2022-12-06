@@ -17,15 +17,20 @@
 
 <body>
     <div id="app">
-        <span v-if="word == null"> Waiting for next round... </span>
-        <span v-if="word != null"> {{ word }} </span>
-        <span v-if="word != null"> <sup> {{ wordLength }} </sup></span>
-        <p><strong>{{timeLeft}}</strong></p>
-        <div>
+        <div id="game">
+            <span v-if="word == null"> Waiting for next round... </span>
+            <span v-if="word != null"> {{ displayWord }} </span>
+            <span v-if="word != null"> <sup> {{ wordLength }} </sup></span>
+            <p><strong>{{timeLeft}}</strong></p>
+        </div>
+        <div id="leaderboard">
+
+        </div>
+        <div id="art">
             <canvas id="canvas" width="800" height="800" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
             <br>
             <label> Color: </label>
-            <input v-model="lineColor" type="color">
+            <input v-model="lineColor" type="color" placeholder="Guess what it is!">
             <label> Size: </label>
             <input type="range" name="size" id="size" v-model="lineSize" min="0" max="100">
             <label> {{ lineSize + " px"}}</label>

@@ -100,18 +100,8 @@ io.on("connection", function (socket) {
         wonThisRound: false
     };
 
-    keyList = Object.keys(userList);
-    numOfUsers = keyList.length;
-
     console.log(userList[socket.id].username + " connected with id " + socket.id);
-    if (debug) {
-        console.log(userList);
-        console.log(iterable);
-        console.log(numOfUsers);
-        console.log(iterable & numOfUsers);
-        console.log(keyList[iterable % numOfUsers]);
-        console.log(userList[keyList[iterable % numOfUsers]].username);
-    }
+
     socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
     io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
 });
@@ -130,21 +120,32 @@ function startGame() {
         userList[i].correctThisRound = false;
         userList[i].wonThisRound = false;
     }
-    /*
-        //actually start the game
-        currentQuote = randomFromArray(quoteList);
-        let secondsToAnswer = currentQuote.length / 2; //Allow them 4 characters per second to get it.
-        io.emit("newQuote", currentQuote, secondsToAnswer);
-    
-        setTimeout(gameOver, secondsToAnswer * 1000);
-    */
 
     currentWord = randomWord();
     console.log(currentWord);
     let secondsToAnswer = 40;
-    io.emit("newWord", currentWord, secondsToAnswer);
 
-    setTimeout(gameOver, secondsToAnswer * 1000);
+    keyList = Object.keys(userList);
+    numOfUsers = keyList.length;
+
+    if (numOfUsers >= 2) {
+        if (debug) {
+            console.log(userList);
+            console.log(iterable);
+            console.log(numOfUsers);
+            console.log(iterable & numOfUsers);
+            console.log(keyList[iterable % numOfUsers]);
+            console.log(userList[keyList[iterable % numOfUsers]].username);
+            io.emit("newWord", "Taylor Swift", secondsToAnswer, userList[keyList[iterable % numOfUsers]].username);
+        } else {
+            io.emit("newWord", currentWord, secondsToAnswer, userList[keyList[iterable % numOfUsers]].username);
+        }
+        iterable++;
+        setTimeout(gameOver, secondsToAnswer * 1000);
+    } else {
+        setTimeout(gameOver, 5000);
+    }
+
 }
 
 function gameOver() {
@@ -160,6 +161,9 @@ function gameOver() {
 
     //Send the game results
     io.emit("sendUsers", cleanUserList());
+
+    //Send command to clear canvas
+    io.emit("clearCanvas");
 
     //Start the next round in 5 seconds.
     setTimeout(startGame, 5000);
