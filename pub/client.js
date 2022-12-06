@@ -88,6 +88,7 @@ let myApp = Vue.createApp({
             if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait rounds are 45 seconds long";
             else if (this.timeLeft <= 0) {
                 this.timeLeft = "Times Up!";
+                this.displayWord = this.word;
                 this.artist = false;
             }
             else this.timeLeft = this.timeLeft.toFixed(1) + " seconds left...";
