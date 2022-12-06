@@ -37,7 +37,7 @@
                     <span v-if="word != null"> <sup> {{ wordLength }} </sup></span>
                     <p><strong>{{timeLeft}}</strong></p>
                 </div>
-                <canvas id="canvas" width="800" height="800" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
+                <canvas id="canvas" width="800" height="550" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
                 <br>
                 <label> Color: </label>
                 <input v-model="lineColor" type="color" placeholder="Guess what it is!">

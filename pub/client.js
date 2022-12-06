@@ -71,16 +71,14 @@ let myApp = Vue.createApp({
         checkGuess() {
             if (this.artist == true) {
                 return;
-            } else if (this.guess == this.word) {
+            } else if (this.guess.toLowerCase() === this.word.toLowerCase()) {
                 this.correct = true;
                 this.displayWord = word;
                 document.getElementById("display").classList.add("correct");
                 socket.emit("gotIt");
-                return;
             } else {
                 this.correct = false;
             }
-            document.getElementById("display").classList.remove("correct");
         },
         setTimeLeft() {
             this.timeLeft = (this.timeLimit - new Date().getTime()) / 1000.0;
@@ -150,6 +148,10 @@ let myApp = Vue.createApp({
         socket.on("clearCanvas", () => {
             console.log("recieved ClearCommand!");
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            if (document.getElementById("display").classList.contains("correct")) {
+                document.getElementById("display").classList.remove("correct");
+            }
+            this.correct = false;
         });
         setInterval(this.setTimeLeft, 100);
     }
