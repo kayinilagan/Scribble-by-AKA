@@ -22,11 +22,10 @@
                 <span> Logged in as {{ username }} </span>
                 <span> Players: </span>
                 <ul>
-                    <li v-for="user of userList">{{user.username}},
-                        Percent correct: {{nicePercent(user.roundsCorrect / user.roundsPlayed)}}
-                        Percent won: {{nicePercent(user.roundsWon / user.roundsPlayed)}}
+                    <li v-for="user of userList">{{user.username}} |
                         <span v-if="user.wonThisRound">🏆</span>
                         <span v-else-if="user.correctThisRound">🏅</span>
+                        <span v-else-if="user.username == drawer"> ✏️ </span>
                     </li>
                 </ul>
             </div>
@@ -45,7 +44,7 @@
                 <input type="range" name="size" id="size" v-model="lineSize" min="0" max="100">
                 <label> {{ lineSize + " px"}}</label>
                 <div>
-                    <input v-on:keydown.enter="checkGuess" v-model="guess" type="text">
+                    <input id="input" v-on:keydown.enter="checkGuess" v-model="guess" type="text">
                     <span> <sup> {{ " " + guess.length }} </sup> </span>
                     <h2 id="answer" v-if="correct"> Correct ✓ </h2>
                 </div>

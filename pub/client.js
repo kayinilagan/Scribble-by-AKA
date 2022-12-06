@@ -35,7 +35,8 @@ let myApp = Vue.createApp({
             correct: false,
             timeLeft: "",
             timeLimit: 0,
-            artist: false
+            artist: false,
+            drawer: "",
         };
     },
     methods: {
@@ -73,11 +74,13 @@ let myApp = Vue.createApp({
                 return;
             } else if (this.guess.toLowerCase() === this.word.toLowerCase()) {
                 this.correct = true;
-                this.displayWord = word;
+                this.displayWord = this.word;
                 document.getElementById("display").classList.add("correct");
                 socket.emit("gotIt");
             } else {
+                console.log("INCORRECT");
                 this.correct = false;
+                document.getElementById("input").classList.add("incorrect");
             }
         },
         setTimeLeft() {
@@ -127,6 +130,7 @@ let myApp = Vue.createApp({
             const doubleSpace = "" + String.fromCharCode(160) + String.fromCharCode(160);
             const regex = /[a-zA-z]/g;
             const spaceRegex = / /g;
+            this.drawer = artist;
             console.log("recieved newWord: " + recievedWord);
             if (artist == this.username) {
                 console.log("You are the artist!");
@@ -148,7 +152,7 @@ let myApp = Vue.createApp({
         socket.on("clearCanvas", () => {
             console.log("recieved ClearCommand!");
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            if (document.getElementById("display").classList.contains("correct")) {
+            if (this.correct == true) {
                 document.getElementById("display").classList.remove("correct");
             }
             this.correct = false;
