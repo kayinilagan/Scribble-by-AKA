@@ -33,7 +33,7 @@
             <div id="art">
                 <div id="game">
                     <span v-if="word == null"> Waiting for next round... </span>
-                    <span v-if="word != null"> {{ displayWord }} </span>
+                    <span id="display" v-if="word != null"> {{ displayWord }} </span>
                     <span v-if="word != null"> <sup> {{ wordLength }} </sup></span>
                     <p><strong>{{timeLeft}}</strong></p>
                 </div>

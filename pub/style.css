@@ -26,10 +26,14 @@ body {
 }
 
 #answer {
-    color: aquamarine;
+    color: green;
 }
 
 
 input {
     font-size: x-large;
+}
+
+.correct {
+    color: green;
 }

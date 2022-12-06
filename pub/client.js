@@ -73,14 +73,18 @@ let myApp = Vue.createApp({
                 return;
             } else if (this.guess == this.word) {
                 this.correct = true;
+                this.displayWord = word;
+                document.getElementById("display").classList.add("correct");
                 socket.emit("gotIt");
+                return;
             } else {
                 this.correct = false;
             }
+            document.getElementById("display").classList.remove("correct");
         },
         setTimeLeft() {
             this.timeLeft = (this.timeLimit - new Date().getTime()) / 1000.0;
-            if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait rounds are 40 seconds long";
+            if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait rounds are 45 seconds long";
             else if (this.timeLeft <= 0) {
                 this.timeLeft = "Times Up!";
                 this.artist = false;
