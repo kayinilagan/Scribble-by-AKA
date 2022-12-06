@@ -47,9 +47,74 @@ function cleanUserList() {
 //correctThisRound (true or false)
 //wonThisRound (true or false)
 let userList = {};
+let numOfUsers = 0;
+let keyList = [];
 let currentWord = null;
 let someoneOne = false;
+let iterable = 0;
 
+
+//Every time a client connects (visits the page) this function(socket) {...} gets executed.
+//The socket is a different object each time a new client connects.
+io.on("connection", function (socket) {
+    socket.on("disconnect", function () {
+        //This particular socket connection was terminated (probably the client went to a different page
+        //or closed their browser).
+        console.log(userList[socket.id].username + " disconnected.");
+        delete userList[socket.id];
+        io.emit("sendUsers", cleanUserList());
+    });
+
+    socket.on("gotIt", function () {
+        if (currentQuote != null) { //only check it if we are in a round.
+            userList[socket.id].correctThisRound = true;
+            if (!someoneOne) { //if this is the first person to get it, give them credit.
+                userList[socket.id].wonThisRound = true;
+                someoneOne = true;
+            }
+            io.emit("sendUsers", cleanUserList());
+        }
+    });
+
+    socket.on("startDrawing", (coords, color, size) => {
+        //tell all clients to start drawing
+        if (debug)
+            console.log("recieved startDrawing");
+        io.emit("artistStartsDrawing", coords, color, size);
+    });
+
+    socket.on("drawTo", (coords, color, size) => {
+        if (debug)
+            console.log("recieved DrawTo");
+        io.emit("artistDrawsTo", coords, color, size);
+    });
+
+
+    //Update internal bookeeping to have this client in our list
+    userList[socket.id] = {
+        username: randomUser(),
+        roundsPlayed: null,
+        roundsCorrect: null,
+        roundsWon: null,
+        correctThisRound: false,
+        wonThisRound: false
+    };
+
+    keyList = Object.keys(userList);
+    numOfUsers = keyList.length;
+
+    console.log(userList[socket.id].username + " connected with id " + socket.id);
+    if (debug) {
+        console.log(userList);
+        console.log(iterable);
+        console.log(numOfUsers);
+        console.log(iterable & numOfUsers);
+        console.log(keyList[iterable % numOfUsers]);
+        console.log(userList[keyList[iterable % numOfUsers]].username);
+    }
+    socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
+    io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
+});
 
 function startGame() {
     someoneOne = false;
@@ -76,6 +141,10 @@ function startGame() {
 
     currentWord = randomWord();
     console.log(currentWord);
+    let secondsToAnswer = 40;
+    io.emit("newWord", currentWord, secondsToAnswer);
+
+    setTimeout(gameOver, secondsToAnswer * 1000);
 }
 
 function gameOver() {
@@ -87,7 +156,7 @@ function gameOver() {
             if (userList[i].wonThisRound) userList[i].roundsWon++;
         }
     }
-    currentQuote = null; //indicates that we are between rounds.
+    currentWord = null; //indicates that we are between rounds.
 
     //Send the game results
     io.emit("sendUsers", cleanUserList());
@@ -105,61 +174,5 @@ server.listen(80, function () {
     } else {
         console.log("Connect to 127.0.0.1 or find Public IP");
     }
-    //console.log("Connect to: http://" + os.networkInterfaces()['Wi-Fi'][1].cidr.slice(0, -3) + ":80");
-    //Every time a client connects (visits the page) this function(socket) {...} gets executed.
-    //The socket is a different object each time a new client connects.
-    io.on("connection", function (socket) {
-        socket.on("disconnect", function () {
-            //This particular socket connection was terminated (probably the client went to a different page
-            //or closed their browser).
-            console.log(userList[socket.id].username + " disconnected.");
-            delete userList[socket.id];
-            io.emit("sendUsers", cleanUserList());
-        });
-
-        socket.on("gotIt", function () {
-            if (currentQuote != null) { //only check it if we are in a round.
-                userList[socket.id].correctThisRound = true;
-                if (!someoneOne) { //if this is the first person to get it, give them credit.
-                    userList[socket.id].wonThisRound = true;
-                    someoneOne = true;
-                }
-                io.emit("sendUsers", cleanUserList());
-            }
-        });
-
-        socket.on("startDrawing", (coords, color, size) => {
-            //tell all clients to start drawing
-            if (debug)
-                console.log("recieved startDrawing");
-            io.emit("artistStartsDrawing", coords, color, size);
-        });
-
-        socket.on("drawTo", (coords, color, size) => {
-            if (debug)
-                console.log("recieved DrawTo");
-            io.emit("artistDrawsTo", coords, color, size);
-        });
-
-
-        //Update internal bookeeping to have this client in our list
-        userList[socket.id] = {
-            username: randomUser(),
-            roundsPlayed: null,
-            roundsCorrect: null,
-            roundsWon: null,
-            correctThisRound: false,
-            wonThisRound: false
-        };
-
-        console.log(userList[socket.id].username + " connected with id " + socket.id);
-        if (debug)
-            console.log(userList);
-        socket.emit("sendName", userList[socket.id].username); //Tell this client their name.
-        io.emit("sendUsers", cleanUserList()); //io.emit() broadcasts to all sockets that are connected!
-        let secondsToAnswer = 30;
-        io.emit("newWord", currentWord, secondsToAnswer);
-    });
-
     startGame();
 });

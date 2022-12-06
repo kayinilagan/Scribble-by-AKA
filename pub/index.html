@@ -7,18 +7,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test</title>
+    <title> Scribble by AKA </title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="/socket.io/socket.io.js" type="text/javascript"></script>
-    <script defer src="vue.global.js" type="text/javascript"></script>
+    <script src="/socket.io/socket.io.js" type="text/javascript"></script>
+    <script src="vue.global.js" type="text/javascript"></script>
     <script defer src="client.js" type="text/javascript"></script>
 </head>
 
 
 <body>
     <div id="app">
-        <span v-if="word != 'Loading...'"> {{ word }} </span>
-        <span> <sup> {{ wordLength }} </sup></span>
+        <span v-if="word == null"> Waiting for next round... </span>
+        <span v-if="word != null"> {{ word }} </span>
+        <span v-if="word != null"> <sup> {{ wordLength }} </sup></span>
+        <p><strong>{{timeLeft}}</strong></p>
         <div>
             <canvas id="canvas" width="800" height="800" @mousedown="mouseDown" @mousemove="mouseMove"></canvas>
             <br>
@@ -35,6 +37,5 @@
         </div>
     </div>
 </body>
-</div>
 
 </html>

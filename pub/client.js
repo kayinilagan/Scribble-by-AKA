@@ -28,10 +28,12 @@ let myApp = Vue.createApp({
             ctx: null,
             lineColor: "#000000",
             lineSize: 3,
-            word: "Loading...",
+            word: null,
             wordLength: 0,
             guess: "",
-            correct: false
+            correct: false,
+            timeLeft: "",
+            timeLimit: 0
         };
     },
     methods: {
@@ -64,6 +66,12 @@ let myApp = Vue.createApp({
             } else {
                 this.correct = false;
             }
+        },
+        setTimeLeft() {
+            this.timeLeft = (this.timeLimit - new Date().getTime()) / 1000.0;
+            if (this.timeLeft <= 0 && this.word == null) this.timeLeft = "Please wait games are 40 seconds long";
+            else if (this.timeLeft <= 0) this.timeLeft = "Times Up!";
+            else this.timeLeft = this.timeLeft.toFixed(1) + " seconds left...";
         }
     },
     computed: {
@@ -97,7 +105,10 @@ let myApp = Vue.createApp({
         socket.on("newWord", (recievedWord, timer) => {
             console.log("recieved newWord: " + recievedWord);
             this.word = recievedWord;
+            this.guess = "";
             this.wordLength = recievedWord.length;
-        })
+            this.timeLimit = (new Date()).getTime() + 1000 * timer; // finds ending time in milliseconds
+        });
+        setInterval(this.setTimeLeft, 100);
     }
 }).mount("#app");
